@@ -17,5 +17,5 @@ private:
 	bool isAlphabet(const char& ch);
 	bool isKeyword(const std::string& pattern);
 	bool isDigit(const char& ch);
-	bool isOperator(const char& ch);
+	bool isOperator(const std::string& pattern);
 };

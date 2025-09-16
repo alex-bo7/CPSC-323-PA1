@@ -35,7 +35,8 @@ void Scanner::scanner()
 					//	break;
 				}
 
-				// NO continue here incase of chars being right next to words, it will skip them
+				inputFile.unget();
+
 				if (isKeyword(pattern))
 				{
 					std::cout << pattern << "\t KEYWORD" << std::endl;
@@ -56,26 +57,34 @@ void Scanner::scanner()
 					pattern += ch;
 				}
 
+				inputFile.unget();
+
 				if (pattern.size() > 1 && pattern[0] == '0')
-				{
 					std::cout << pattern << "\t INVALID" << std::endl;
-					continue;
-				}
+				else
+					std::cout << pattern << "\t INTEGER" << std::endl;
+			}
+			else if (isOperator(std::string(1, ch))) // OPERATOR
+			{
+				std::string pattern;
+				pattern += ch;
+
+				inputFile.get(ch);
+				if (!isWhitespace(ch))
+					pattern += ch;
+
+				if (isOperator(pattern))
+					std::cout << pattern << "\t OPERATOR" << std::endl;
 				else
 				{
-					std::cout << pattern << "\t INTEGER" << std::endl;
-					continue;
+					inputFile.unget();
+					std::cout << ch << "\t OPERATOR" << std::endl;
 				}
-			}
-			else if (isOperator(ch)) // OPERATOR
-			{
-				std::cout << ch << "\t OPERATOR" << std::endl;
-				continue;
+
 			}
 			else if (isPuntuation(ch)) // PUNCTUATION
 			{
 				std::cout << ch << "\t PUNCTUATION" << std::endl;
-				continue;
 			}
 			else if (ch == '\"') // STRING
 			{
@@ -84,11 +93,13 @@ void Scanner::scanner()
 				while (inputFile.get(ch))
 				{
 					if (ch == '\"')
+					{
+						pattern += ch;
 						break;
+					}
 					pattern += ch;
 				}
 				std::cout << pattern << "\t STRING" << std::endl;
-				continue;
 			}
 			else if (ch == '/')
 			{
@@ -136,7 +147,8 @@ bool Scanner::isKeyword(const std::string& pattern)
 	const std::unordered_set<std::string> KEYWORD {
 		"if", "else",
 		"for", "while",
-		"int"
+		"int",
+		"return"
 	};
 
 	return KEYWORD.find(pattern) != KEYWORD.end();
@@ -147,11 +159,14 @@ bool Scanner::isDigit(const char& ch)
 	return (ch >= '0' && ch <= '9');
 }
 
-bool Scanner::isOperator(const char& ch)
+bool Scanner::isOperator(const std::string& pattern)
 {
-	const std::unordered_set<char> OPERATOR {
-		'+', '-', '*', '/', '%'
+	const std::unordered_set<std::string> OPERATOR {
+		"+", "-", "*", "/", "%",
+		"++", "--",
+		">", "<", ">=", "<=", "==",
+		"="
 	};
 
-	return OPERATOR.find(ch) != OPERATOR.end();
+	return OPERATOR.find(pattern) != OPERATOR.end();
 }

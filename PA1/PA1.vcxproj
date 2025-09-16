@@ -127,6 +127,7 @@
     <ClCompile Include="scanner.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="input_sourcecode.txt" />
     <Text Include="text.txt" />
   </ItemGroup>
   <ItemGroup>

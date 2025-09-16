@@ -7,7 +7,7 @@
 int main() 
 {
 	//Scanner myScanner("random.txt");
-	Scanner myScanner("text.txt");
+	Scanner myScanner("input_sourcecode.txt");
 
 	myScanner.scanner();
 
