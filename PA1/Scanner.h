@@ -14,5 +14,7 @@ private:
 
 	bool isWhitespace(const char& ch);
 	bool isPuntuation(const char& ch);
-	void matchToken(const std::string& pattern);
+	bool isAlphabet(const char& ch);
+	bool isKeyword(const std::string& pattern);
+	bool isDigit(const char& ch);
 };

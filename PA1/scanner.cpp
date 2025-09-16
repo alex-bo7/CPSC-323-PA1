@@ -20,16 +20,53 @@ void Scanner::scanner()
 	{
 		if (!isWhitespace(ch))
 		{
-			std::cout << ch << std::endl;
+			//std::cout << ch << std::endl;
+			if (isAlphabet(ch) || ch == '_') // KEYWORD or IDENTIFIER
+			{
+				std::string pattern;
+				pattern += ch;
+				while (inputFile.get(ch))
+				{
+					if (isWhitespace(ch) || isPuntuation(ch))
+						break;
 
-			// skip whitespace
-			if (ch > 'a' && ch < 'z' || ch > 'A' && ch < 'Z' || ch == '_')
-			{
-				// identifier or keyword
+					pattern += ch;
+					//if (pattern == "__") // invalid??
+					//	break;
+				}
+
+				if (isKeyword(pattern))
+				{
+					std::cout << pattern << "\t KEYWORD" << std::endl;
+					continue;
+				}
+				else
+				{
+					std::cout << pattern << "\t IDENTIFIER" << std::endl;
+					continue;
+				}
 			}
-			else if (ch >= '0' && ch <= '9')
+			else if (isDigit(ch)) // INTEGER
 			{
-				// digit
+				std::string pattern;
+				pattern += ch;
+				while (inputFile.get(ch))
+				{
+					if (!isDigit(ch))
+						break;
+					pattern += ch;
+				}
+
+				if (pattern.size() > 1 && pattern[0] == '0')
+				{
+					std::cout << pattern << "\t INVALID" << std::endl;
+					continue;
+				}
+				else
+				{
+					std::cout << pattern << "\t INTEGER" << std::endl;
+					continue;
+				}
 			}
 			else if (ch == '\"')
 			{
@@ -46,7 +83,13 @@ void Scanner::scanner()
 			else
 			{
 				// ad hoc
+				/*std::cout << ch << "\t INVALID" << std::endl;
+				return;*/
 			}
+		}
+		else
+		{
+			// final decision?
 		}
 	}
 }
@@ -69,29 +112,23 @@ bool Scanner::isPuntuation(const char& ch)
 	return PUNCTUATION.find(ch) != PUNCTUATION.end();
 }
 
-void Scanner::matchToken(const std::string& pattern)
+bool Scanner::isAlphabet(const char& ch)
 {
-	const std::unordered_set<char> IDENTIFIER {
-		// a full word, check last range: a-zA-Z
+	return (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z');
+}
+
+bool Scanner::isKeyword(const std::string& pattern)
+{
+	const std::unordered_set<std::string> KEYWORD {
+		"if", "else",
+		"for", "while",
+		"int"
 	};
 
-	const std::unordered_set<char> INTEGER {
-		// any number except octal (start with 0) range 0-9+
-	};
+	return KEYWORD.find(pattern) != KEYWORD.end();
+}
 
-	const std::unordered_set<char> KEYWORD {
-		' ', '\t', '\n' // if else while for
-	};
-
-	const std::unordered_set<char> OPERATOR {
-		' ', '\t', '\n' // + = - /
-	};
-
-	const std::unordered_set<char> PUNCTUATION {
-		' ', '\t', '\n' // ( {
-	};
-
-	const std::unordered_set<char> STRING {
-		' ', '\t', '\n' // surrounded ""
-	};
+bool Scanner::isDigit(const char& ch)
+{
+	return (ch >= '0' && ch <= '9');
 }
