@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <unordered_map>
 
 class Scanner
 {
@@ -11,6 +12,20 @@ public:
 
 private:
 	std::fstream inputFile;
+
+	enum TOKEN {
+		IDENTIFIER,
+		INTEGER,
+		KEYWORD,
+		OPERATOR,
+		PUNCTUATION,
+		STRING
+	};
+
+	std::unordered_map<std::string, TOKEN> lexemeTokenPairs;
+
+	template <typename T>
+	void displayLexemeToken(const T& lexeme, const std::string& token);
 
 	bool isWhitespace(const char& ch);
 	bool isPuntuation(const char& ch);

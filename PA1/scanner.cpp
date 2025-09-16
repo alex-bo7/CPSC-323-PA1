@@ -1,5 +1,6 @@
 #include "Scanner.h"
 #include <iostream>
+#include <iomanip>
 #include <unordered_set>
 
 Scanner::Scanner(const std::string& fileName)
@@ -39,11 +40,11 @@ void Scanner::scanner()
 
 				if (isKeyword(pattern))
 				{
-					std::cout << pattern << "\t KEYWORD" << std::endl;
+					displayLexemeToken(pattern, "KEYWORD");
 				}
 				else
 				{
-					std::cout << pattern << "\t IDENTIFIER" << std::endl;
+					displayLexemeToken(pattern, "IDENTIFIER");
 				}
 			}
 			else if (isDigit(ch)) // INTEGER
@@ -60,9 +61,9 @@ void Scanner::scanner()
 				inputFile.unget();
 
 				if (pattern.size() > 1 && pattern[0] == '0')
-					std::cout << pattern << "\t INVALID" << std::endl;
+					displayLexemeToken(pattern, "INVALID");
 				else
-					std::cout << pattern << "\t INTEGER" << std::endl;
+					displayLexemeToken(pattern, "INTEGER");
 			}
 			else if (isOperator(std::string(1, ch))) // OPERATOR
 			{
@@ -81,18 +82,18 @@ void Scanner::scanner()
 						pattern += ch;
 
 					if (isOperator(pattern))
-						std::cout << pattern << "\t OPERATOR" << std::endl;
+						displayLexemeToken(pattern, "OPERATOR");
 					else
 					{
 						inputFile.unget();
-						std::cout << ch << "\t OPERATOR" << std::endl;
+						displayLexemeToken(ch, "OPERATOR");
 					}
 				}
 
 			}
 			else if (isPuntuation(ch)) // PUNCTUATION
 			{
-				std::cout << ch << "\t PUNCTUATION" << std::endl;
+				displayLexemeToken(ch, "PUNCTUATION");
 			}
 			else if (ch == '\"') // STRING
 			{
@@ -107,7 +108,7 @@ void Scanner::scanner()
 					}
 					pattern += ch;
 				}
-				std::cout << pattern << "\t STRING" << std::endl;
+				displayLexemeToken(pattern, "STRING");
 			}
 			else
 			{
@@ -121,6 +122,13 @@ void Scanner::scanner()
 			// final decision?
 		}
 	}
+}
+
+template <typename T>
+void Scanner::displayLexemeToken(const T& lexeme, const std::string& token)
+{
+	std::cout << std::left << std::setw(10) << lexeme
+			  << std::setw(15) << token << std::endl;
 }
 
 bool Scanner::isWhitespace(const char& ch)
@@ -193,7 +201,8 @@ void Scanner::commentToken(char& ch)
 				break;
 			pattern += ch;
 		}
-		std::cout << pattern << "\t COMMENT" << std::endl;
+		//displayLexemeToken(pattern, "COMMENT");
+
 	}
 	else
 	{
@@ -208,6 +217,6 @@ void Scanner::commentToken(char& ch)
 				pattern += ch;
 		}
 		pattern += ch;
-		std::cout << pattern << "\t COMMENT" << std::endl;
+		//displayLexemeToken(pattern, "COMMENT");
 	}
 }
