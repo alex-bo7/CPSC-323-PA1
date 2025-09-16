@@ -2,35 +2,16 @@
 #include <fstream>
 #include <string>
 
+#include "Scanner.h"
+
 int main() 
 {
-	std::string userFile = "text.txt";
-	std::ifstream inputFile(userFile);
+	//Scanner myScanner("random.txt");
+	Scanner myScanner("text.txt");
 
-	if (!inputFile.is_open()) {
-		std::cerr << "Problem opening file: " << userFile << std::endl;
-		return 1;
-	}
+	myScanner.scanner();
 
-	char ch;
-	std::string continousWord;
-
-	while (inputFile.get(ch))
-	{
-		if (ch != ' ') // replace with ASCII?
-		{
-			std::cout << ch << std::endl;
-			//continousWord += ch;
-		}
-		else
-			std::cout << "SPACE" << std::endl;
-	}
-
-	inputFile.close();
-
-	std::cout << continousWord << std::endl;
-
-	continousWord = ""; // reset word every iteration
+	//inputFile.close();
 
 	return 0;
 }
