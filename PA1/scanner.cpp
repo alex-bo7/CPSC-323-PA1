@@ -35,15 +35,14 @@ void Scanner::scanner()
 					//	break;
 				}
 
+				// NO continue here incase of chars being right next to words, it will skip them
 				if (isKeyword(pattern))
 				{
 					std::cout << pattern << "\t KEYWORD" << std::endl;
-					continue;
 				}
 				else
 				{
 					std::cout << pattern << "\t IDENTIFIER" << std::endl;
-					continue;
 				}
 			}
 			else if (isDigit(ch)) // INTEGER
@@ -68,13 +67,28 @@ void Scanner::scanner()
 					continue;
 				}
 			}
-			else if (ch == '\"')
+			else if (isOperator(ch)) // OPERATOR
 			{
-				// string
+				std::cout << ch << "\t OPERATOR" << std::endl;
+				continue;
 			}
-			else if (ch == '*')
+			else if (isPuntuation(ch)) // PUNCTUATION
 			{
-				// operator
+				std::cout << ch << "\t PUNCTUATION" << std::endl;
+				continue;
+			}
+			else if (ch == '\"') // STRING
+			{
+				std::string pattern;
+				pattern += ch;
+				while (inputFile.get(ch))
+				{
+					if (ch == '\"')
+						break;
+					pattern += ch;
+				}
+				std::cout << pattern << "\t STRING" << std::endl;
+				continue;
 			}
 			else if (ch == '/')
 			{
@@ -131,4 +145,13 @@ bool Scanner::isKeyword(const std::string& pattern)
 bool Scanner::isDigit(const char& ch)
 {
 	return (ch >= '0' && ch <= '9');
+}
+
+bool Scanner::isOperator(const char& ch)
+{
+	const std::unordered_set<char> OPERATOR {
+		'+', '-', '*', '/', '%'
+	};
+
+	return OPERATOR.find(ch) != OPERATOR.end();
 }
