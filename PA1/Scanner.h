@@ -13,5 +13,6 @@ private:
 	std::fstream inputFile;
 
 	bool isWhitespace(const char& ch);
+	bool isPuntuation(const char& ch);
 	void matchToken(const std::string& pattern);
 };

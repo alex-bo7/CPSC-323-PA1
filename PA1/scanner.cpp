@@ -16,27 +16,39 @@ Scanner::Scanner(const std::string& fileName)
 void Scanner::scanner()
 {
 	char ch;
-	std::string pattern;
 	while (inputFile.get(ch))
 	{
-		if (isWhitespace(ch))
+		if (!isWhitespace(ch))
 		{
-			// when meet ws that means end of continous pattern aka word
-			// that is when we give it final identifier
+			std::cout << ch << std::endl;
 
-			// give identifier at each ch and/or final at full word??
-
-			std::cout << pattern << std::endl;
-			pattern = "";
+			// skip whitespace
+			if (ch > 'a' && ch < 'z' || ch > 'A' && ch < 'Z' || ch == '_')
+			{
+				// identifier or keyword
+			}
+			else if (ch >= '0' && ch <= '9')
+			{
+				// digit
+			}
+			else if (ch == '\"')
+			{
+				// string
+			}
+			else if (ch == '*')
+			{
+				// operator
+			}
+			else if (ch == '/')
+			{
+				// comment
+			}
+			else
+			{
+				// ad hoc
+			}
 		}
-		else
-		{
-			pattern += ch;
-		}
-
-		// SKIP COMMENTS
 	}
-	std::cout << pattern << std::endl;
 }
 
 bool Scanner::isWhitespace(const char& ch)
@@ -46,6 +58,15 @@ bool Scanner::isWhitespace(const char& ch)
 	};
 
 	return WHITESPACE.find(ch) != WHITESPACE.end();
+}
+
+bool Scanner::isPuntuation(const char& ch)
+{
+	const std::unordered_set<char> PUNCTUATION {
+		'(', ')', '{', '}', ';'
+	};
+
+	return PUNCTUATION.find(ch) != PUNCTUATION.end();
 }
 
 void Scanner::matchToken(const std::string& pattern)
