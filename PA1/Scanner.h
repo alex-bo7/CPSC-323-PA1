@@ -18,4 +18,7 @@ private:
 	bool isKeyword(const std::string& pattern);
 	bool isDigit(const char& ch);
 	bool isOperator(const std::string& pattern);
+	bool isComment(const char& ch);
+
+	void commentToken(char& ch);
 };

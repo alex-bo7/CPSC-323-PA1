@@ -66,19 +66,27 @@ void Scanner::scanner()
 			}
 			else if (isOperator(std::string(1, ch))) // OPERATOR
 			{
-				std::string pattern;
-				pattern += ch;
-
-				inputFile.get(ch);
-				if (!isWhitespace(ch))
-					pattern += ch;
-
-				if (isOperator(pattern))
-					std::cout << pattern << "\t OPERATOR" << std::endl;
+				if (isComment(ch))
+				{
+					commentToken(ch);
+				}
 				else
 				{
-					inputFile.unget();
-					std::cout << ch << "\t OPERATOR" << std::endl;
+					std::string pattern;
+					pattern += ch;
+
+					inputFile.get(ch);
+
+					if (!isWhitespace(ch))
+						pattern += ch;
+
+					if (isOperator(pattern))
+						std::cout << pattern << "\t OPERATOR" << std::endl;
+					else
+					{
+						inputFile.unget();
+						std::cout << ch << "\t OPERATOR" << std::endl;
+					}
 				}
 
 			}
@@ -100,10 +108,6 @@ void Scanner::scanner()
 					pattern += ch;
 				}
 				std::cout << pattern << "\t STRING" << std::endl;
-			}
-			else if (ch == '/')
-			{
-				// comment
 			}
 			else
 			{
@@ -169,4 +173,41 @@ bool Scanner::isOperator(const std::string& pattern)
 	};
 
 	return OPERATOR.find(pattern) != OPERATOR.end();
+}
+
+bool Scanner::isComment(const char& ch)
+{
+	return ( ch == '/' && (inputFile.peek() == '/' || inputFile.peek() == '*') );
+}
+
+void Scanner::commentToken(char& ch)
+{
+	if (inputFile.peek() == '/')
+	{
+		// consume until newline
+		std::string pattern;
+		pattern += ch;
+		while (inputFile.get(ch))
+		{
+			if (ch == '\n')
+				break;
+			pattern += ch;
+		}
+		std::cout << pattern << "\t COMMENT" << std::endl;
+	}
+	else
+	{
+		// consume until */
+		std::string pattern;
+		pattern += ch;
+		while (inputFile.get(ch))
+		{
+			if (ch == '/')
+				break;
+			if (!isWhitespace(ch))
+				pattern += ch;
+		}
+		pattern += ch;
+		std::cout << pattern << "\t COMMENT" << std::endl;
+	}
 }
