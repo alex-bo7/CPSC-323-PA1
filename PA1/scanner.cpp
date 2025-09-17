@@ -123,6 +123,8 @@ void Scanner::scanner()
 			// final decision?
 		}
 	}
+
+	inputFile.close();
 }
 
 void Scanner::printLexemeToken()
@@ -175,10 +177,27 @@ bool Scanner::isAlphabet(const char& ch)
 bool Scanner::isKeyword(const std::string& pattern)
 {
 	const std::unordered_set<std::string> KEYWORD {
-		"if", "else",
-		"for", "while",
-		"int",
-		"return"
+		// Control flow
+		"if", "else", "switch", "case", "default",
+		"for", "while", "do", "break", "continue",
+
+		// Data types
+		"int", "float", "double", "char", "string", "bool", "void"
+
+		// I/O
+		"cin", "cout", "endl",
+
+		// Functions
+		"return", "auto",
+
+		// Modifiers
+		"const", "static",
+
+		// Classes and objects
+		"class", "struct", "public", "private", "protected", "new", "delete",
+
+		// Logical values
+		"true", "false"
 	};
 
 	return KEYWORD.find(pattern) != KEYWORD.end();

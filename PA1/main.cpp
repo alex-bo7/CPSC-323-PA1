@@ -6,13 +6,25 @@
 
 int main() 
 {
-	//Scanner myScanner("random.txt");
-	Scanner myScanner("input_sourcecode.txt");
+	char again = 'y';
+	while (again == 'y')
+	{
+		std::cout << "Enter text file name only: ";
+		std::string fileName;
+		std::cin >> fileName;
 
-	myScanner.scanner();
-	myScanner.printLexemeToken();
+		fileName += ".txt";
+		std::cout << std::endl;
 
-	//inputFile.close();
+		Scanner myScanner(fileName);
+
+		myScanner.scanner();
+		myScanner.printLexemeToken();
+
+		std::cout << "\nScan another file? y|n  ";
+		std::cin >> again;
+		std::cout << std::endl;
+	}
 
 	return 0;
 }
