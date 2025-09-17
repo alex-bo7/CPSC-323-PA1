@@ -140,15 +140,6 @@ bool Scanner::isWhitespace(const char& ch)
 	return WHITESPACE.find(ch) != WHITESPACE.end();
 }
 
-bool Scanner::isPuntuation(const char& ch)
-{
-	const std::unordered_set<char> PUNCTUATION {
-		'(', ')', '{', '}', ';'
-	};
-
-	return PUNCTUATION.find(ch) != PUNCTUATION.end();
-}
-
 bool Scanner::isAlphabet(const char& ch)
 {
 	return (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z');
@@ -182,6 +173,16 @@ bool Scanner::isOperator(const std::string& pattern)
 
 	return OPERATOR.find(pattern) != OPERATOR.end();
 }
+
+bool Scanner::isPuntuation(const char& ch)
+{
+	const std::unordered_set<char> PUNCTUATION{
+		'(', ')', '{', '}', ';'
+	};
+
+	return PUNCTUATION.find(ch) != PUNCTUATION.end();
+}
+
 
 bool Scanner::isComment(const char& ch)
 {

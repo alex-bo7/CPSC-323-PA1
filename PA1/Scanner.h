@@ -24,15 +24,15 @@ private:
 
 	std::unordered_map<std::string, TOKEN> lexemeTokenPairs;
 
-	template <typename T>
+	template <typename T> // remove later
 	void displayLexemeToken(const T& lexeme, const std::string& token);
 
 	bool isWhitespace(const char& ch);
-	bool isPuntuation(const char& ch);
 	bool isAlphabet(const char& ch);
 	bool isKeyword(const std::string& pattern);
 	bool isDigit(const char& ch);
 	bool isOperator(const std::string& pattern);
+	bool isPuntuation(const char& ch);
 	bool isComment(const char& ch);
 
 	void commentToken(char& ch);
