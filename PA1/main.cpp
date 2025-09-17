@@ -10,6 +10,7 @@ int main()
 	Scanner myScanner("input_sourcecode.txt");
 
 	myScanner.scanner();
+	myScanner.printLexemeToken();
 
 	//inputFile.close();
 

@@ -9,6 +9,7 @@ public:
 	Scanner(const std::string& fileName);
 
 	void scanner();
+	void printLexemeToken();
 
 private:
 	std::fstream inputFile;
@@ -22,10 +23,9 @@ private:
 		STRING
 	};
 
-	std::unordered_map<std::string, TOKEN> lexemeTokenPairs;
+	std::string tokenToString(const TOKEN& token);
 
-	template <typename T> // remove later
-	void displayLexemeToken(const T& lexeme, const std::string& token);
+	std::unordered_map<std::string, TOKEN> lexemeTokenPairs;
 
 	bool isWhitespace(const char& ch);
 	bool isAlphabet(const char& ch);
