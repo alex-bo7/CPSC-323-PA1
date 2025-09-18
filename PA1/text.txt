@@ -1,5 +1,5 @@
 int main()
 {
+	double bin = 000;
 
-	return 0;
 }

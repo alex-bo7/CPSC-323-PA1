@@ -9,7 +9,8 @@ public:
 	Scanner(const std::string& fileName);
 
 	void scanner();
-	void printLexemeToken();
+	void printLexemeToken(std::ostream& out);
+	void saveToFile(const std::string& fileName);
 
 private:
 	std::fstream inputFile;
@@ -20,12 +21,16 @@ private:
 		KEYWORD,
 		OPERATOR,
 		PUNCTUATION,
-		STRING
+		STRING,
+		ADHOC
 	};
 
 	std::string tokenToString(const TOKEN& token);
 
 	std::unordered_map<std::string, TOKEN> lexemeTokenPairs;
+	std::unordered_map<TOKEN, std::string> groupLexemes;
+
+	void groupLexemesTogether();
 
 	bool isWhitespace(const char& ch);
 	bool isAlphabet(const char& ch);

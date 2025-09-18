@@ -19,7 +19,9 @@ void Scanner::scanner()
 	char ch;
 	while (inputFile.get(ch))
 	{
-		if (!isWhitespace(ch))
+		if (isWhitespace(ch))
+			continue;
+		else
 		{
 			//std::cout << ch << std::endl;
 			if (isAlphabet(ch) || ch == '_') // KEYWORD or IDENTIFIER
@@ -61,8 +63,7 @@ void Scanner::scanner()
 				inputFile.unget();
 
 				if (pattern.size() > 1 && pattern[0] == '0')
-					//displayLexemeToken(pattern, "INVALID");
-					int a;
+					lexemeTokenPairs.insert({ pattern, ADHOC });
 				else
 					lexemeTokenPairs.insert({ pattern, INTEGER });
 			}
@@ -113,37 +114,50 @@ void Scanner::scanner()
 			}
 			else
 			{
-				// ad hoc
-				/*std::cout << ch << "\t INVALID" << std::endl;
-				return;*/
+				lexemeTokenPairs.insert({ std::string(1, ch), ADHOC });
 			}
-		}
-		else
-		{
-			// final decision?
 		}
 	}
 
+	groupLexemesTogether();
 	inputFile.close();
 }
 
-void Scanner::printLexemeToken()
+void Scanner::groupLexemesTogether()
 {
-	std::unordered_map<TOKEN, std::string> tokenCount;
-
 	for (const auto& pair : lexemeTokenPairs)
 	{
-		tokenCount[pair.second] += pair.first; // insert key, increase value count
+		groupLexemes[pair.second] += pair.first; // add lexeme together with same TOKEN
 	}
+}
 
-	std::cout << std::left << std::setw(16) << "Token" << "Lexemes" << std::endl;
-	std::cout << std::string(23, '-') << std::endl;
+void Scanner::printLexemeToken(std::ostream& out)
+{
+	out << std::left << std::setw(16) << "Token" << "Lexemes" << std::endl;
+	out << std::string(23, '-') << std::endl;
 
-	for (const auto& pair : tokenCount)
+	for (const auto& pair : groupLexemes)
 	{
-		std::cout << std::left << std::setw(10) 
+		out << std::left << std::setw(10) 
 			<< tokenToString(pair.first) << "\t" << pair.second << std::endl;
 	}
+}
+
+void Scanner::saveToFile(const std::string & fileName)
+{
+	std::ofstream myFile(fileName); // creates or overrides
+
+	if (myFile.is_open())
+	{
+		printLexemeToken(myFile);
+		std::cout << "Saved to file: " << fileName << std::endl;
+	} 
+	else
+	{
+		std::cerr << "Problem opening file: " << fileName  << std::endl;
+	}
+
+	myFile.close();
 }
 
 std::string Scanner::tokenToString(const TOKEN& token)
