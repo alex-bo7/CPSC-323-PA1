@@ -1,0 +1,8 @@
+Token           Lexemes
+-----------------------
+KEYWORD   	intforcoutifelsewhileendlreturn
+PUNCTUATION	}();{
+IDENTIFIER	mainsumi
+OPERATOR  	=<=+%==-<
+INTEGER   	010100125
+STRING    	"Current sum: "

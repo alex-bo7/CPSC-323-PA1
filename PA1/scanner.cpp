@@ -78,16 +78,16 @@ void Scanner::scanner()
 					std::string pattern;
 					pattern += ch;
 
-					inputFile.get(ch);
+					char nextCh = inputFile.peek();
+					std::string twoCharOperator = pattern + nextCh;
 
-					if (!isWhitespace(ch))
-						pattern += ch;
-
-					if (isOperator(pattern))
-						lexemeTokenPairs.insert({ pattern, OPERATOR });
+					if (isOperator(twoCharOperator))
+					{
+						inputFile.get(nextCh);
+						lexemeTokenPairs.insert({ twoCharOperator, OPERATOR });
+					}
 					else
 					{
-						inputFile.unget();
 						lexemeTokenPairs.insert({ std::string(1, ch), OPERATOR });
 					}
 				}
@@ -226,6 +226,7 @@ bool Scanner::isOperator(const std::string& pattern)
 {
 	const std::unordered_set<std::string> OPERATOR {
 		"+", "-", "*", "/", "%",
+		"+=", "-=", "*=", "/=","%=",
 		"++", "--",
 		">", "<", ">=", "<=", "==",
 		"="
